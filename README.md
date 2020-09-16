@@ -1,7 +1,7 @@
 # inventory
 A lightweight property inventory helper
 
-## Still in development (v0.*), so expect things to not work
+## Still in development (v0.\*), *so expect things to not work*
 
 Designed to help SCA branches manage both annual inventories and pack-in/pack-out at events, this app keeps track of items, grouping them into Boxes (can be literal or virtual boxes), which are then further grouped into Warehouses. Think of Warehouses as locations where Boxes are stored. Does your branch have a cargo trailer full of items? The trailer is a Warehouse.
 
@@ -12,7 +12,7 @@ Designed to help SCA branches manage both annual inventories and pack-in/pack-ou
 * Move items from one box to another by updating the current box's end date and creating a new items_in_boxes record for the new box, leaving the end date blank. Item's box history will be preserved.
 * Reports: 
   * entire inventory arranged by warehouse and box with no orphaned tables or optionally starting a new page every box
-  * export entire inventory to .csv for spreadsheet-friendly backup
+  * export entire inventory to .csv for spreadsheet-friendly backup. Filter by keywords, Warehouses, boxes. Group by Warehouse or Box (NOTE: .csv does not support multiple sheets per file, so if you request grouping by Warehouse or by Box, you will receive multiple .csv files - one for each group object.)
   * export database as database-friendly backup file
   * consumable items, per box, for printing to allow event staff or annual inventory staff to verify quantities remaining and make notes.
   * consumable items, filtered to show items which are running low, to use as a shopping list for replenishment
