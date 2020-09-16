@@ -5,7 +5,7 @@ __pycache__
 myvenv
 db.sqlite3
 db.json
-/static
+/static/inv/img
 .DS_Store
 /zip
 .wakatime

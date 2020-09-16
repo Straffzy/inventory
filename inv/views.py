@@ -18,17 +18,35 @@ def search(request):
 def reports(request):
     return HttpResponse("Hello, world. You're at the Reports Page.")
 
+def items(request):
+    items = Items.objects.all()
+    return render(request, 'inv/items.html', {'items' : items})
+
 def item(request):
-    return HttpResponse("Hello, world. You're at the Item Page.")
+    return HttpResponse("Hello, world. You're looking at an individual item.")
+
+def boxes(request):
+    boxes = Boxes.objects.all()
+    items = Items_in_boxes.objects.filter(date_to__exact='')
+    return render(request, 'inv/boxes.html', {'boxes' : boxes, 'items' : items})
 
 def box(request):
-    return HttpResponse("Hello, world. You're at the Box Page.")
+    return HttpResponse("Hello, world. You're looking at an individual box.")
+
+def warehouses(request):
+    boxes = Boxes.objects.all()
+    wh = Warehouse.objects.all()
+    return render(request, 'inv/warehouses.html', {'wh' : wh, 'boxes' : boxes})
 
 def warehouse(request):
-    return HttpResponse("Hello, world. You're at the Warehouse Page.")
+    return HttpResponse("Hello, world. You're looking at an individual warehouse.")
 
 def consumable(request):
-    return HttpResponse("Hello, world. You're at the Consumables Page.")
+    consumables = Items.filter(item_consumable=True)
+    return render(request, 'inv/consumables.html', {'consumables' : consumables})
+
+def inventories(request):
+    return HttpResponse("Hello, world. You're at the Inventories Summary.")
 
 def inventory(request):
-    return HttpResponse("Hello, world. You're at the Inventories Page.")
+    return HttpResponse("Hello, world. You're looking at an individual summary.")
