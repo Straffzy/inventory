@@ -1,0 +1,57 @@
+{% extends 'inv/base.html' %}
+
+
+{% block content %}
+
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">Hello, world!</h1>
+      <p>Welcome to the Shire Inventory Manager! There are {{ item_count.count }} items in {{ box_count.count }} boxes across {{ warehouse_count.count }} warehouses. The estimated total replacement value of all items is ${{ val.item_value__sum|floatformat:2 }}.</p>
+      <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- First Row of Link Items -->
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Warehouse List</h2>
+        <p>A Warehouse is a geographic location which contains one or more boxes. </p>
+        <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+      </div>
+      <div class="col-md-4">
+        <h2>Box List</h2>
+        <p>A box contains one or more items. Not all boxes are literal.</p>
+        <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+      </div>
+      <div class="col-md-4">
+        <h2>Item List</h2>
+        <p>A list of all items in the database.</p>
+        <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+      </div>
+    </div>
+    <!-- Second Row of Link Items -->
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Reports</h2>
+        <p>Generate Reports and Inventory Management Aids</p>
+
+        <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+      </div>
+      <div class="col-md-4">
+        <h2>Search</h2>
+        <p>Search Items by name, category, color, or material</p>
+        <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+      </div>
+      <div class="col-md-4">
+        <h2>Download</h2>
+        <p>Export and download the data to PDF, .csv, or .db file.</p>
+        <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+      </div>
+    </div>
+    <hr>
+
+  </div> <!-- /container -->
+
+{% endblock %}

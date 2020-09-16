@@ -1,11 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
-def index(request): 
-    return HttpResponse("Hello, world. You're at the inventory index.")
+from .models import Warehouse, Boxes, Items, Staff, Items_in_boxes, Keywords, Keywords_in_items, Inventory
+from django.db.models import Count, Sum
+def index(request):
+    item_count = Items.objects.all().annotate(Count("item_id"))
+    box_count = Boxes.objects.all().annotate(Count("box_id"))
+    warehouse_count = Warehouse.objects.all().annotate(Count("warehouse_id"))
+    val = Items.objects.all().aggregate(Sum("item_value"))
+    return render(request, 'inv/index.html', {'item_count' : item_count, 'box_count' : box_count, 'warehouse_count' : warehouse_count, 'val' : val })
 
 def dash(request):
-    return HttpResponse("Hello, world. You're at the Dashboard.")
+    return render(request, 'inv/dash.html', {})
 
 def search(request):
     return HttpResponse("Hello, world. You're at the Search Page.")
@@ -27,5 +32,3 @@ def consumable(request):
 
 def inventory(request):
     return HttpResponse("Hello, world. You're at the Inventories Page.")
-
-

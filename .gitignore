@@ -8,3 +8,5 @@ db.json
 /static
 .DS_Store
 /zip
+.wakatime
+credentials.py
