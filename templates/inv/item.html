@@ -3,28 +3,45 @@
 
 {% block content %}
 {% load static %} 
-  <!-- Main jumbotron for a primary marketing message or call to action -->
-  <h1>Warehouse: {{ wh.warehouse_name }}</h1>
-  <p class="lead">A Warehouse is a Collection of Boxes.</p>
-  <div class="row mb-3">
-    {% for b in boxes %}
-        <div class="col-md-4 themed-grid-col">
-    
-
-      <div class="card mb-4 border-dark">
-                  <img class="card-img-top" src="" alt="Box Designator">
-                  <div class="card-body">
-                     <h5 class="card-title">{{ b.box_name }}</h5>
-                     <p class="card-text">There are {{ b.num_items }} boxes attached to this warehouse.</p>
-                     <a href="{% url 'box' b.box_id %}" class="btn btn-dark btn-sm">View</a>
-                  </div>
+ <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">Item: {{ item.item_name }}</h1>
+      <p>This item currently lives in {{ item.box }}, which is housed in
+      the {{ item.wh }} warehouse.</p>
+      {% if item.item_img|length > 0 %}
+      <img src="{% static 'inv/img/' | add:item.item_img %}" alt="Photograph
+        of item"/>
+      {% else %}
+      <p class="warning">A photograph of this item doesn't exist. If you'd like
+      to contribute, please snap a photo and email it to the site contact with
+      a subject line of "Property database photo for item {{ item.item_id }}"
+      so we can add it (and so we know which database entry to add it to!).
+      {% endif %}
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 align-self-center">
+        <p>
+        Description: {{ item.item_desc }}<br/>
+        Quantity: {{ item.item_qty }} <br/>
+        Value (each): {{ item.item_value|floatformat:2 }} <br/>
+        {% if item.item_qty > 1 %}
+        Value (total): {{ item.totval|floatformat:2 }} <br/>
+        {% endif }
+        {% if item.consumable == True %}
+        Consumable: Yes<br/>
+        Percent Remaining: {{ item.item_remaining }}&#37;<br/>
+        {% else %}
+        Consumable: No<br/>
+        {% endif %}
+        </p> 
       </div>
     </div>
-
-
-
-        {% endfor %}
   </div>
+  <hr>
+</div><!-- /container -->
 
   
 {% endblock %}

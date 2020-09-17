@@ -23,7 +23,7 @@ class Staff(models.Model):
 
 class Boxes(models.Model):
     box_id = models.IntegerField(primary_key=True)
-    box_name = models.CharField(max_length=20, default='box')
+    box_name = models.CharField(max_length=20, default='box' )
     warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
     box_location = models.CharField(max_length=300, blank=True)
     box_description = models.CharField(max_length=300, blank=True)

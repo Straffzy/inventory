@@ -24,10 +24,11 @@ def items(request):
     return render(request, 'inv/items.html', {'items' : items})
 
 def item(request, itemid):
-    item = Items.objects.get(box_id=itemid)
-    box = Items_in_boxes.objects.filter(date_to__isnull=True).filter(itemid)
-    wh = Warehouses.objects.get(items_in_boxes__box_id__warehouse)
-    return render(request, 'inv/item.html', {'item' : item, 'box' : box, 'wh' : wh}) 
+    item = Items.objects.filter(item_id=itemid).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).get(item_id=itemid)
+    box.id = Items_in_boxes.objects.filter(item_id=itemid).filter(date_to__isnull=True).annotate(id=F('box_id'))
+    box.name = Items_in_boxes.objects.filter(item_id=itemid).filter(date_to__isnull=True).annotate(name=F('item_id__box_id__box_name'))
+    wh = Boxes.objects.filter(box_id=box.id).annotate(wh=F('box_id__warehouse__warehouse_name'))
+    return render(request, 'inv/item.html', {'item' : item , 'box' : box, 'wh' : wh }) 
 
 def boxes(request):
     curr_items = Items_in_boxes.objects.filter(date_to__isnull=True)
@@ -36,10 +37,9 @@ def boxes(request):
 
 def box(request, boxid):
     box = Boxes.objects.prefetch_related('warehouse').get(box_id=boxid)
-    items = Items_in_boxes.objects.prefetch_related().filter(date_to__isnull=True).filter(box_id=boxid).annotate(totval=Sum(F('item_id__item_value')*F('item_id__item_qty'),
-        output_field=FloatField()), item_img=F('item_id__item_img'))
-    val = Items_in_boxes.objects.filter(box_id=boxid).filter(date_to__isnull=True).aggregate(Sum("item_id__item_value"))
-    return render(request, 'inv/box.html', {'box' : box, 'items': items, 'val' : val})
+    items = Items_in_boxes.objects.prefetch_related().filter(date_to__isnull=True).filter(box_id=boxid).annotate(item_img=F('item_id__item_img'), totval=Sum(F('item_id__item_value')*F('item_id__item_qty'), output_field=FloatField()))
+    items.item_totals = Items_in_boxes.objects.filter(date_to__isnull=True).filter(box_id=boxid).aggregate(icount=Count('item_id'), val=Sum('item_id__item_value'))
+    return render(request, 'inv/box.html', {'box' : box, 'items': items})
 
 def warehouses(request):
     wh = Warehouse.objects.all().annotate(num_boxes=Count('boxes'))

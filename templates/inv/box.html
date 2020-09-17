@@ -3,21 +3,21 @@
 
 {% block content %}
 {% load static %}
-  <!-- Main jumbotron for a primary marketing message or call to action -->
+  
   <h1>Box: {{ box.box_name }}</h1>
   <p class="lead">This box is part of the {{ box.warehouse }} warehouse. It
-  contains {{ box.num_items }} items, </p>
+  contains {{ items.item_totals.icount }} items with a total value of ${{ items.item_totals.val|floatformat:2 }}.</p>
   <div class="row mb-3">
     {% for i in items %}
         <div class="col-md-4 themed-grid-col">
     
 
       <div class="card mb-4 border-dark">
-        <img class="card-img-top" src="{% static 'inv/img/'|add:i.item_id.item_img %}" alt="Box Designator">
+        <img class="card-img-top" src="{% static 'inv/img/'|add:i.item_img %}" alt="Box Designator">
                   <div class="card-body">
                     <h5 class="card-title">{{ i.item_id.item_name }}</h5>
                      <p class="card-text">
-                        Item description: {{ i.item_desc }}<br/>
+                        Item description: {{ i.item_id.item_desc }}<br/>
                         Quantity: {{ i.item_id.item_qty }}<br/>
                         Value (each): {{ i.item_id.item_value|floatformat:2 }}<br/>
                         {% if i.item_id.item_qty > 1 %}
