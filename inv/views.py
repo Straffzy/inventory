@@ -22,24 +22,27 @@ def items(request):
     items = Items.objects.all()
     return render(request, 'inv/items.html', {'items' : items})
 
-def item(request):
+def item(request, itemid):
     return HttpResponse("Hello, world. You're looking at an individual item.")
 
 def boxes(request):
-    boxes = Boxes.objects.all()
+    boxes = Boxes.objects.all().filter(items_in_boxes__date_to__exact='').annotate(num_items=Count('items_in_boxes'))
     items = Items_in_boxes.objects.filter(date_to__exact='')
     return render(request, 'inv/boxes.html', {'boxes' : boxes, 'items' : items})
 
-def box(request):
-    return HttpResponse("Hello, world. You're looking at an individual box.")
+def box(request, boxid):
+    box = Boxes.objects.get(box_id=boxid)
+    items = Items.objects.filter(items_in_boxes__date_to__exact='').filter(box_id=boxid)
+    return render(request, 'inv/box.html', {'box' : box, 'items': items})
 
 def warehouses(request):
-    boxes = Boxes.objects.all()
-    wh = Warehouse.objects.all()
-    return render(request, 'inv/warehouses.html', {'wh' : wh, 'boxes' : boxes})
+    wh = Warehouse.objects.all().annotate(num_boxes=Count('boxes'))
+    return render(request, 'inv/warehouses.html', {'wh' : wh})
 
-def warehouse(request):
-    return HttpResponse("Hello, world. You're looking at an individual warehouse.")
+def warehouse(request, whid):
+    wh = Warehouse.objects.get(warehouse_id=whid)
+    boxes = Boxes.objects.filter(warehouse_id=whid).annotate(num_items=Count('items'))
+    return render(request, 'inv/warehouse.html', {'wh' : wh, 'boxes' : boxes})
 
 def consumable(request):
     consumables = Items.filter(item_consumable=True)
@@ -48,5 +51,5 @@ def consumable(request):
 def inventories(request):
     return HttpResponse("Hello, world. You're at the Inventories Summary.")
 
-def inventory(request):
+def inventory(request, invid):
     return HttpResponse("Hello, world. You're looking at an individual summary.")
