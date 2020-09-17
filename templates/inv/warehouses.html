@@ -2,21 +2,20 @@
 
 
 {% block content %}
+{% load static %}
 
   <!-- Main jumbotron for a primary marketing message or call to action -->
   <h1>Warehouses</h1>
   <p class="lead">A Warehouse is a Collection of Boxes.</p>
   <div class="row mb-3">
     {% for w in wh %}
-    {% if forloop.counter0|divisibleby:4 and not forloop.first %}<!-- <div
-    class="w-100"> </div> -->
-    {% endif %}
     <div class="col-md-4 themed-grid-col">
     
 
       <div class="card mb-4 border-dark">
-                  <img class="card-img-top" src="" alt="Warehouse Designator">
-                  <div class="card-body">
+        <img class="card-img-top" src="{% static 'inv/img/'|add:w.warehouse_img %}" 
+          alt="Warehouse Designator" size="75%">
+                 <div class="card-body">
                      <h5 class="card-title">{{ w.warehouse_name }}</h5>
                      <p class="card-text">This warehouse is located at {{ w.warehouse_loc }}. 
                      There are {{ w.num_boxes }} boxes attached to this warehouse.</p>

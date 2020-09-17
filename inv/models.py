@@ -7,6 +7,7 @@ class Warehouse(models.Model):
     warehouse_name = models.CharField(max_length=100, default='warehouse')
     warehouse_loc = models.CharField(max_length=200, blank=True)
     warehouse_details = models.CharField(max_length=300, blank=True)
+    warehouse_img = models.CharField(max_length=20, blank=True, default='warehouse.png')
     class Meta: verbose_name_plural = "Warehouses"
     def __str__(self):
         return '%s' % (self.warehouse_name)
@@ -27,6 +28,7 @@ class Boxes(models.Model):
     box_location = models.CharField(max_length=300, blank=True)
     box_description = models.CharField(max_length=300, blank=True)
     other_box_details = models.CharField(max_length=300, blank=True)
+    box_img = models.CharField(max_length=20, blank=True, default='box.png')
     class Meta: verbose_name_plural = "Boxes"
     def __str__(self):
         return '%s) %s' % (self.box_id, self.box_name)
@@ -50,8 +52,7 @@ class Items(models.Model):
             )
     
     class Meta: verbose_name_plural = "Items"
-    def __str__(self):
-        return '%s' % (self.item_name)
+
 
 class Items_in_boxes(models.Model):
     txn_id = models.AutoField(primary_key=True)

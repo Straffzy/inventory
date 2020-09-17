@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Warehouse, Boxes, Items, Staff, Items_in_boxes, Keywords, Keywords_in_items, Inventory
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q, F, FloatField 
+
 def index(request):
     item_count = Items.objects.all().annotate(Count("item_id"))
     box_count = Boxes.objects.all().annotate(Count("box_id"))
@@ -23,17 +24,22 @@ def items(request):
     return render(request, 'inv/items.html', {'items' : items})
 
 def item(request, itemid):
-    return HttpResponse("Hello, world. You're looking at an individual item.")
+    item = Items.objects.get(box_id=itemid)
+    box = Items_in_boxes.objects.filter(date_to__isnull=True).filter(itemid)
+    wh = Warehouses.objects.get(items_in_boxes__box_id__warehouse)
+    return render(request, 'inv/item.html', {'item' : item, 'box' : box, 'wh' : wh}) 
 
 def boxes(request):
-    boxes = Boxes.objects.all().filter(items_in_boxes__date_to__exact='').annotate(num_items=Count('items_in_boxes'))
-    items = Items_in_boxes.objects.filter(date_to__exact='')
-    return render(request, 'inv/boxes.html', {'boxes' : boxes, 'items' : items})
+    curr_items = Items_in_boxes.objects.filter(date_to__isnull=True)
+    boxes = Boxes.objects.all().annotate(num_items=Count('curr_items'))
+    return render(request, 'inv/boxes.html', {'boxes' : boxes })
 
 def box(request, boxid):
-    box = Boxes.objects.get(box_id=boxid)
-    items = Items.objects.filter(items_in_boxes__date_to__exact='').filter(box_id=boxid)
-    return render(request, 'inv/box.html', {'box' : box, 'items': items})
+    box = Boxes.objects.prefetch_related('warehouse').get(box_id=boxid)
+    items = Items_in_boxes.objects.prefetch_related().filter(date_to__isnull=True).filter(box_id=boxid).annotate(totval=Sum(F('item_id__item_value')*F('item_id__item_qty'),
+        output_field=FloatField()), item_img=F('item_id__item_img'))
+    val = Items_in_boxes.objects.filter(box_id=boxid).filter(date_to__isnull=True).aggregate(Sum("item_id__item_value"))
+    return render(request, 'inv/box.html', {'box' : box, 'items': items, 'val' : val})
 
 def warehouses(request):
     wh = Warehouse.objects.all().annotate(num_boxes=Count('boxes'))
@@ -41,7 +47,9 @@ def warehouses(request):
 
 def warehouse(request, whid):
     wh = Warehouse.objects.get(warehouse_id=whid)
-    boxes = Boxes.objects.filter(warehouse_id=whid).annotate(num_items=Count('items'))
+    boxes = Boxes.objects.filter(warehouse_id=whid).annotate(num_items=Count('items_in_boxes',
+        filter=Q(items_in_boxes__date_to__isnull=True))).annotate(val=Sum("items_in_boxes__item_id__item_value",
+            filter=Q(items_in_boxes__date_to__isnull=True)))
     return render(request, 'inv/warehouse.html', {'wh' : wh, 'boxes' : boxes})
 
 def consumable(request):
@@ -52,4 +60,10 @@ def inventories(request):
     return HttpResponse("Hello, world. You're at the Inventories Summary.")
 
 def inventory(request, invid):
-    return HttpResponse("Hello, world. You're looking at an individual summary.")
+    return HttpResponse("Hello, world. You're looking at an individual inventory summary.")
+
+def keywords(request):
+    return HttpResponse("Hello, world. You're looking at a list of keywords.")
+
+def downloads(request):
+    return HttpResponse("Hello, world. You're looking at the Downloads Page.")

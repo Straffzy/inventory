@@ -2,21 +2,36 @@
 
 
 {% block content %}
-
+{% load static %}
   <!-- Main jumbotron for a primary marketing message or call to action -->
-  <h1>Warehouse: {{ wh.warehouse_name }}</h1>
-  <p class="lead">A Warehouse is a Collection of Boxes.</p>
+  <h1>Box: {{ box.box_name }}</h1>
+  <p class="lead">This box is part of the {{ box.warehouse }} warehouse. It
+  contains {{ box.num_items }} items, </p>
   <div class="row mb-3">
-    {% for b in boxes %}
+    {% for i in items %}
         <div class="col-md-4 themed-grid-col">
     
 
       <div class="card mb-4 border-dark">
-                  <img class="card-img-top" src="" alt="Box Designator">
+        <img class="card-img-top" src="{% static 'inv/img/'|add:i.item_id.item_img %}" alt="Box Designator">
                   <div class="card-body">
-                     <h5 class="card-title">{{ b.box_name }}</h5>
-                     <p class="card-text">There are {{ b.num_items }} boxes attached to this warehouse.</p>
-                     <a href="{% url 'box' b.box_id %}" class="btn btn-dark btn-sm">View</a>
+                    <h5 class="card-title">{{ i.item_id.item_name }}</h5>
+                     <p class="card-text">
+                        Item description: {{ i.item_desc }}<br/>
+                        Quantity: {{ i.item_id.item_qty }}<br/>
+                        Value (each): {{ i.item_id.item_value|floatformat:2 }}<br/>
+                        {% if i.item_id.item_qty > 1 %}
+                        Value (total): {{ i.totval|floatformat:2 }}<br/>
+                        {% endif %}
+                        {% if i.item_id.item_consumable == True %}
+                        Consumable: Yes<br/>
+                        Percent Remaining: {{ i.item_id.item_remaining }}&#37;<br/>
+                        {% else %}
+                        Consumable: No<br/>
+                        {% endif %}
+
+                     </p>
+                     <a href="{% url 'item' i.item_id.item_id %}" class="btn btn-dark btn-sm">View</a>
                   </div>
       </div>
     </div>

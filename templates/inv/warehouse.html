@@ -2,20 +2,21 @@
 
 
 {% block content %}
-
+{% load static %} 
   <!-- Main jumbotron for a primary marketing message or call to action -->
   <h1>Warehouse: {{ wh.warehouse_name }}</h1>
-  <p class="lead">A Warehouse is a Collection of Boxes.</p>
+  <p class="lead">This warehouse is located at {{ wh.warehouse_loc }}.</p>
   <div class="row mb-3">
     {% for b in boxes %}
         <div class="col-md-4 themed-grid-col">
     
 
       <div class="card mb-4 border-dark">
-                  <img class="card-img-top" src="" alt="Box Designator">
+        <img class="card-img-top" src="{% static 'inv/img/'|add:wh.warehouse_img %}" alt="Box Designator">
                   <div class="card-body">
                      <h5 class="card-title">{{ b.box_name }}</h5>
-                     <p class="card-text">There are {{ b.num_items }} boxes attached to this warehouse.</p>
+                     <p class="card-text">There are {{ b.num_items }} items in
+                     this box, valued at ${{ b.val|floatformat:2 }}.</p>
                      <a href="{% url 'box' b.box_id %}" class="btn btn-dark btn-sm">View</a>
                   </div>
       </div>

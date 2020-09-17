@@ -15,4 +15,6 @@ urlpatterns = [
         path('consumable/', views.consumable, name='consumable'),
         path('inventories/', views.inventory, name='inventories'),
         path('inventories/<int:invid>/', views.inventory, name='inventory'),
+        path('keywords/', views.keywords, name='keywords'),
+        path('downloads/', views.downloads, name='downloads'),
         ]
