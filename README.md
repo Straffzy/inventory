@@ -35,6 +35,8 @@ Key: (I) = implemented
  Requirements: 
  * Python3[.6|.7|.8] (get the latest you can, but 3.6 is still supported if that's what you've got.)
  * Git
+ * Pip
+ * Django
  
  in the folder where you want to install the app (it comes with a top-level folder called "inventory")
  
