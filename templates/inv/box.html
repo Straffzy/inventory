@@ -13,7 +13,14 @@
     
 
       <div class="card mb-4 border-dark">
-        <img class="card-img-top" src="{% static 'inv/img/'|add:i.item_img %}" alt="Box Designator">
+        {% if i.item_id.item_img|length > 0 %}
+        <img class="card-img-top" src="{% static 'inv/img/'|add:i.item_img %}" 
+                                  alt="Box">
+        {% else %}
+        <p>This item does not have an image. You can add one by taking a photo
+        of the item and emailing it to the site contact, with <em>Subject: Photo
+        for Inventory item #{{ i.item_id.item_id }}.</em></p>
+        {% endif %}
                   <div class="card-body">
                     <h5 class="card-title">{{ i.item_id.item_name }}</h5>
                      <p class="card-text">

@@ -24,7 +24,7 @@ class Staff(models.Model):
 class Boxes(models.Model):
     box_id = models.IntegerField(primary_key=True)
     box_name = models.CharField(max_length=20, default='box' )
-    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='bx_wh')
     box_location = models.CharField(max_length=300, blank=True)
     box_description = models.CharField(max_length=300, blank=True)
     other_box_details = models.CharField(max_length=300, blank=True)
@@ -36,7 +36,7 @@ class Boxes(models.Model):
 class Items(models.Model):
     item_id = models.AutoField(primary_key=True)
     item_name = models.CharField(max_length=50, default='name')
-    item_owner_staff_id = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    item_owner_staff_id = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='owner')
     item_desc = models.CharField(max_length=500, blank=True)
     item_img = models.CharField(max_length=50, blank=True)
     item_qty = models.IntegerField(default='1')
@@ -56,9 +56,9 @@ class Items(models.Model):
 
 class Items_in_boxes(models.Model):
     txn_id = models.AutoField(primary_key=True)
-    item_id = models.ForeignKey(Items, on_delete=models.CASCADE)
-    box_id = models.ForeignKey(Boxes, on_delete=models.CASCADE)
-    date_from = models.DateField(default=datetime.date.today)
+    item_id = models.ForeignKey(Items, on_delete=models.CASCADE, related_name='itm_id')
+    box_id = models.ForeignKey(Boxes, on_delete=models.CASCADE, related_name='bx_id')
+    date_from = models.DateField(default=datetime.date)
     date_to = models.DateField(blank=True, null=True)
     moved_by_staff_id = models.ForeignKey(Staff, on_delete=models.CASCADE)
     reason = models.CharField(max_length=100)
@@ -72,8 +72,8 @@ class Keywords(models.Model):
         return '%s' % (self.keyword)
 
 class Keywords_in_items(models.Model):
-    item_id = models.ForeignKey(Items, on_delete=models.CASCADE)
-    keyword = models.ForeignKey(Keywords, on_delete=models.CASCADE)
+    item_id = models.ForeignKey(Items, on_delete=models.CASCADE, related_name='kw_itm')
+    keyword = models.ForeignKey(Keywords, on_delete=models.CASCADE, related_name='kw_kw')
     class Meta: verbose_name_plural = "Keywords in Items"
 
 class Inventory(models.Model):

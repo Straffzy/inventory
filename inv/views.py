@@ -25,9 +25,8 @@ def items(request):
 
 def item(request, itemid):
     item = Items.objects.filter(item_id=itemid).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).get(item_id=itemid)
-    box.id = Items_in_boxes.objects.filter(item_id=itemid).filter(date_to__isnull=True).annotate(id=F('box_id'))
-    box.name = Items_in_boxes.objects.filter(item_id=itemid).filter(date_to__isnull=True).annotate(name=F('item_id__box_id__box_name'))
-    wh = Boxes.objects.filter(box_id=box.id).annotate(wh=F('box_id__warehouse__warehouse_name'))
+    box = Items_in_boxes.objects.filter(item_id=itemid).filter(date_to__isnull=True).annotate(name=F('box_id__box_name')).annotate(bx_id=F('box_id')).get(item_id=itemid) 
+    wh = Boxes.objects.filter(box_id=box.bx_id).annotate(name=F('warehouse__warehouse_name')).get(box_id=box.bx_id)
     return render(request, 'inv/item.html', {'item' : item , 'box' : box, 'wh' : wh }) 
 
 def boxes(request):
@@ -42,14 +41,14 @@ def box(request, boxid):
     return render(request, 'inv/box.html', {'box' : box, 'items': items})
 
 def warehouses(request):
-    wh = Warehouse.objects.all().annotate(num_boxes=Count('boxes'))
+    wh = Warehouse.objects.all().annotate(num_boxes=Count('bx_wh'))
     return render(request, 'inv/warehouses.html', {'wh' : wh})
 
 def warehouse(request, whid):
     wh = Warehouse.objects.get(warehouse_id=whid)
-    boxes = Boxes.objects.filter(warehouse_id=whid).annotate(num_items=Count('items_in_boxes',
-        filter=Q(items_in_boxes__date_to__isnull=True))).annotate(val=Sum("items_in_boxes__item_id__item_value",
-            filter=Q(items_in_boxes__date_to__isnull=True)))
+    boxes = Boxes.objects.filter(warehouse_id=whid).annotate(num_items=Count('bx_id',
+        filter=Q(bx_id__date_to__isnull=True))).annotate(val=Sum("bx_id__item_id__item_value",
+            filter=Q(bx_id__date_to__isnull=True)))
     return render(request, 'inv/warehouse.html', {'wh' : wh, 'boxes' : boxes})
 
 def consumable(request):

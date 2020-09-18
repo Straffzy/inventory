@@ -7,8 +7,8 @@
   <div class="jumbotron">
     <div class="container">
       <h1 class="display-3">Item: {{ item.item_name }}</h1>
-      <p>This item currently lives in {{ item.box }}, which is housed in
-      the {{ item.wh }} warehouse.</p>
+      <p>This item currently lives in<em> Box {{ box.bx_id }}: {{ box.name }}</em>,
+      which is housed in the <em> {{ wh.name }}</em> warehouse.</p>
       {% if item.item_img|length > 0 %}
       <img src="{% static 'inv/img/' | add:item.item_img %}" alt="Photograph
         of item"/>
@@ -29,8 +29,8 @@
         Value (each): {{ item.item_value|floatformat:2 }} <br/>
         {% if item.item_qty > 1 %}
         Value (total): {{ item.totval|floatformat:2 }} <br/>
-        {% endif }
-        {% if item.consumable == True %}
+        {% endif %}
+        {% if item.item_consumable == True %}
         Consumable: Yes<br/>
         Percent Remaining: {{ item.item_remaining }}&#37;<br/>
         {% else %}
