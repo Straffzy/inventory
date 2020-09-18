@@ -30,8 +30,7 @@ def item(request, itemid):
     return render(request, 'inv/item.html', {'item' : item , 'box' : box, 'wh' : wh }) 
 
 def boxes(request):
-    curr_items = Items_in_boxes.objects.filter(date_to__isnull=True)
-    boxes = Boxes.objects.all().annotate(num_items=Count('curr_items'))
+    boxes = Boxes.objects.all().annotate(num_items=Count('bx_id__item_id', filter=Q(bx_id__date_to__isnull=True)))
     return render(request, 'inv/boxes.html', {'boxes' : boxes })
 
 def box(request, boxid):

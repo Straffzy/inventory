@@ -7,7 +7,7 @@
 
 # Django Secret Key
 django = { 
-        secret_key : 'paste your secret key here'
+        'secret_key' : 'paste your secret key here'
         }
 
 # In settings.py, do the following (remove comment #s)
