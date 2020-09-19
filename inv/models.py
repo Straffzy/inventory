@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Warehouse(models.Model):
@@ -58,7 +59,7 @@ class Items_in_boxes(models.Model):
     txn_id = models.AutoField(primary_key=True)
     item_id = models.ForeignKey(Items, on_delete=models.CASCADE, related_name='itm_id')
     box_id = models.ForeignKey(Boxes, on_delete=models.CASCADE, related_name='bx_id')
-    date_from = models.DateField(default=datetime.date)
+    date_from = models.DateField(default=timezone.now)
     date_to = models.DateField(blank=True, null=True)
     moved_by_staff_id = models.ForeignKey(Staff, on_delete=models.CASCADE)
     reason = models.CharField(max_length=100)

@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Warehouse, Boxes, Items, Staff, Items_in_boxes, Keywords, Keywords_in_items, Inventory
-from django.db.models import Count, Sum, Q, F, FloatField 
+from django.db.models import Count, Sum, Q, F, DecimalField, FloatField, IntegerField, ExpressionWrapper
+from decimal import Decimal
 
 def index(request):
     item_count = Items.objects.all().annotate(Count("item_id"))
@@ -50,8 +51,8 @@ def warehouse(request, whid):
             filter=Q(bx_id__date_to__isnull=True)))
     return render(request, 'inv/warehouse.html', {'wh' : wh, 'boxes' : boxes})
 
-def consumable(request):
-    consumables = Items.filter(item_consumable=True)
+def consumables(request):
+    consumables = Items.objects.filter(item_consumable=True).annotate(restock=ExpressionWrapper(F('item_qty') * ((100.0 - F('item_remaining'))/100.0), output_field=FloatField()))
     return render(request, 'inv/consumables.html', {'consumables' : consumables})
 
 def inventories(request):

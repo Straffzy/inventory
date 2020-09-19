@@ -1,0 +1,40 @@
+{% extends 'inv/base.html' %}
+
+
+{% block content %}
+{% load static %}
+ 
+<h1>Consumables List</h1>
+<p class="small">Print this and take it shopping with you!</p>
+<p><input type="checkbox" name="toggle" onClick="hiderows();"/> Hide rows with no restock need.</p>
+<table class="table">
+  <thead>
+    <th scope="col">Item ID</th>
+    <th scope="col">Item Name</th>
+    <th scope="col">Quantity</th>
+    <th scope="col">Percent Remaining</th>
+    <th scope="col">Restock Qty</th>
+  </thead>
+  <tbody>
+    {% for i in consumables %}
+    {% if i.item_remaining == 100 %}
+    <tr class="full">
+      {% else %}  
+    <tr>
+      {% endif %}
+      <td>{{ i.item_id }}</td>
+      <td>{{ i.item_name }}</td>
+      <td>{{ i.item_qty }}</td>
+      <td>{{ i.item_remaining }}&#37;</td>
+      {% if i.item_qty > 1 %}
+      <td>Buy {{ i.restock|floatformat }}</td>    
+      {% elif i.item_qty == 1 and i.item_remaining < 100 %}
+      <td>Restock Soon</td>
+      {% else %}
+      <td></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+  <hr>
+  {% endblock %}

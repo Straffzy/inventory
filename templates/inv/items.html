@@ -3,31 +3,40 @@
 
 {% block content %}
 {% load static %} 
-  <!-- Main jumbotron for a primary marketing message or call to action -->
-  <h1>Warehouses</h1>
-  <p class="lead">A Warehouse is a Collection of Boxes.</p>
-  <div class="row mb-3">
-    {% for w in wh %}
-    {% if forloop.counter0|divisibleby:4 and not forloop.first %}<!-- <div
-    class="w-100"> </div> -->
-    {% endif %}
-    <div class="col-md-4 themed-grid-col">
-    
 
-      <div class="card mb-4 border-dark">
-                  <img class="card-img-top" src="" alt="Warehouse Designator">
-                  <div class="card-body">
-                     <h5 class="card-title">{{ w.warehouse_name }}</h5>
-                     <p class="card-text">This warehouse is located at {{ w.warehouse_loc }}. 
-                     There are {{ w.num_boxes }} boxes attached to this warehouse.</p>
-                     <a href="{% url 'warehouse' w.warehouse_id %}" class="btn btn-dark btn-sm">View</a>
-                  </div>
+  <h1>Items</h1>
+  <p class="lead">There are {{ items.count }} items in this collection.</p>
+  <div class="row mb-3">
+    {% for i in items %}
+      {% if forloop.counter0|divisibleby:4 and not forloop.first %}<!-- <div
+        class="w-100"> </div> -->
+      {% endif %}
+      <div class="col-md-4 themed-grid-col">
+        <div class="card mb-4 border-dark">
+          {% if i.item_img|length > 0 %}
+            <img class="card-img-top" 
+               src="{% static 'inv/img/'|add:i.item_img %}" alt="Photo of Item">
+            {% else %}<p>A photo of this item does not exist.</p>
+            {% endif %}
+            <p>
+            Description: {{ i.item_desc }}<br/>
+            Quantity: {{ i.item_qty }} <br/>
+            Value (each): {{ i.item_value|floatformat:2 }} <br/>
+            {% if i.item_qty > 1 %}
+            Value (total): {{ i.totval|floatformat:2 }} <br/>
+            {% endif %}
+            {% if i.item_consumable == True %}
+            Consumable: Yes<br/>
+            Percent Remaining: {{ i.item_remaining }}&#37;<br/>
+            {% else %}
+            Consumable: No<br/>
+            {% endif %}
+            <a href="{% url 'item' i.item_id %}" class="btn btn-dark
+                   btn-sm">View</a>
+            </p>
       </div>
     </div>
-
-
-
-        {% endfor %}
+    {% endfor %}
   </div>
 
   
