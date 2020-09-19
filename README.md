@@ -5,6 +5,8 @@ A lightweight property inventory helper
 
 This app is for assisting SCA branches in managing both annual inventories and pack-in/pack-out at events. It is designed to be installed on a portable machine (a $35 Raspberry Pi fits the bill nicely here, but spend the extra $10 for a case) to be taken to events and serve up web pages with inventory information without needing access to the Internet.
 
+See it in action at https://cordelya.pythonanywhere.com
+
 Want to try it out? Scroll to the bottom!
 
 Items are grouped into Boxes (can be literal or virtual boxes), which are then further grouped into Warehouses. In this context, a warehouse is a geographic location where a box or boxes are stored. A branch cargo trailer full of items is a Warehouse. Examples of virtual boxes include the "loose in the trailer" box, the "driver-side cargo rack" box, or the "gold-key-closet" box. 
@@ -12,11 +14,11 @@ Items are grouped into Boxes (can be literal or virtual boxes), which are then f
 Key: (I) = implemented
      (N) = not yet implemented
 
-(I/N) notations updated 9/17/2020 at close of coding day.
+(I/N) notations updated 9/18/2020 at close of coding day.
 
 * (I) Tracks whether items are consumable or not
 * (I) Tracks the replacement value of each item. Front-end displays total aggregate value on index, and sub-values on Warehouse and Box detail pages.
-* (I)Set keywords to make search results filter-able. Add as many keywords as applicable. Suggested keywords include "Category: <category>" for categories like "kitchen" "archery" "heraldic" etc; "Color: <color>" to classify items by their main color(s); "Material: <material>" to classify by material (glass, metal, plastic, etc)
+* (I) Set keywords to make search results filter-able. Add as many keywords as applicable. Suggested keywords include "Category: <category>" for categories like "kitchen" "archery" "heraldic" etc; "Color: <color>" to classify items by their main color(s); "Material: <material>" to classify by material (glass, metal, plastic, etc)
   * (N) Keywords show on item detail page
   * (N) Keyword detail pages list all items
 * (I) Move items from one box to another by updating the current box's end date and creating a new items_in_boxes record for the new box, leaving the end date blank. Item's box history will be preserved. Front end shows only current location.
@@ -25,7 +27,7 @@ Key: (I) = implemented
   * (N) export entire inventory to .csv for spreadsheet-friendly backup. Filter by keywords, Warehouses, boxes. Group by Warehouse or Box (NOTE: .csv does not support multiple sheets per file, so if you request grouping by Warehouse or by Box, you will receive multiple .csv files - one for each group object.)
   * (I) export database as database-friendly backup file (available on command-line)
   * (N) consumable items, per box, for printing to allow event staff or annual inventory staff to verify quantities remaining and make notes.
-  * (N) consumable items, filtered to show items which are running low, to use as a shopping list for replenishment
+  * (I) consumable items, filtered to show items which are running low, to use as a shopping list for replenishment
 * (N) Pack-out friendly search: when item arrives for packing, begin search with general item description (ie "ladle"), then narrow search by keyword (Category: Kitchen, Material: Metal, etc.) until matching item is identified (verify visually via inline photo) and place item in indicated box. Can go very quickly if a person familiar with the system is staffing the search terminal.
  * (N) Warehouse detail page shows photo associated with warehouse. This could be an image of an individual's or officer's armory, or a photo of the physical warehouse.
  * (N) Box listing on warehouse detail, box list, and box detail includes photo of box, if set.
