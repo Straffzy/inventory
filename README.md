@@ -55,15 +55,20 @@ $ python manage.py runserver
 ````
 
 Head to 127.0.0.1:8000/admin and log in
+
 Begin by adding at least one warehouse. Add at least one box to one warehouse. Add some keywords. Add at least one item (and associate it with a box and keywords in the same form).
+
 Suggested keywords include:
 * categories structured as Category: Category, so kitchen items might use a category keyword of Category: Kitchen
 * colors structured as Color: Color, so an item that is blue and red might use Color: Blue and Color: Red
 * materials structured as Material: Material, so an item that is glass might use Material: Glass
+
 You can add as many keywords as you want to each item. If you want to mark some items that need attention, you could assign them a "TODO" keyword and then filter on the "TODO" keyword later on.
 
 A note about items and quantities:
+
 If you have 15 non-disposable water pitchers that are all the same, you can put them in one item record. Set the quantity to 15 and leave the "percent remaining" field at 100. 
 If you have 200 disposable plastic cups, but a "full" supply of cups is 500, you can enter 500 as the quantity, check the "consumable" box, and then enter 40 in the "percent remaining" field. 
+
 If you have a roll of plastic cling wrap, enter 1 as the quantity, and estimate how much is left on the roll for the "percent remaining" field. Check the "consumable" box.
 When you view the consumables shopping list (check the feature list - it might not be built yet), you will see all of the consumable items, their "full" quantity, and their percent remaining. If the item count is greater than 1, the quantity needed will be calculated based on the "full" quantity and percentage remaining so your restocking shopper will know how many of each item they need to buy.
