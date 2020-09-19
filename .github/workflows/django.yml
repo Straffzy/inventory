@@ -25,6 +25,13 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Generate temporary credentials.py file
+      run: |
+        touch credentials.py
+        echo "django = { 
+        'secret_key' : 'r)xr7sonypklija*4q5rk9*fdv^dkt0y1s5ms+#4uf45p0%r9j'
+        }" > credentials.py
+
     - name: Run Tests
       run: |
         python manage.py test
