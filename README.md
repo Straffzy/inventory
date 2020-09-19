@@ -3,7 +3,7 @@ A lightweight property inventory helper
 
 ## Still in development (v0.\*), *so expect things to not work*
 
-This app is for assisting SCA branches in managing both annual inventories and pack-in/pack-out at events. It is designed to be installed on a portable machine (a $35 Raspberry Pi fits the bill nicely here, but spend the extra $10 for a case) to be taken to events and serve up web pages with inventory information without needing access to the Internet.
+This app is for assisting SCA branches in managing both annual inventories and pack-in/pack-out at events. It is designed to be installed on a portable machine - to be taken to events and serve up web pages with inventory information without needing access to the Internet. A [$35 Raspberry Pi](https://www.raspberrypi.org/products/) fits the bill nicely here, but take my advice and spend the extra $10 for a [case](https://www.raspberrypi.org/products/raspberry-pi-4-case/). 
 
 See it in action at https://cordelya.pythonanywhere.com
 
