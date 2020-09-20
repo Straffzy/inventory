@@ -12,7 +12,7 @@
     
 
       <div class="card mb-4 border-dark">
-        <img class="card-img-top" src="{% static 'inv/img/'|add:wh.warehouse_img %}" alt="Box Designator">
+        <img class="card-img-top" src="{% static 'inv/img/'|add:b.box_img %}" alt="Box Designator">
                   <div class="card-body">
                      <h5 class="card-title">{{ b.box_name }}</h5>
                      <p class="card-text">There are {{ b.num_items }} items in
