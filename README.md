@@ -14,12 +14,12 @@ Items are grouped into Boxes (can be literal or virtual boxes), which are then f
 Key: (I) = implemented
      (N) = not yet implemented
 
-(I/N) notations updated 9/18/2020 at close of coding day.
+(I/N) notations updated 9/20/2020.
 
 * (I) Tracks whether items are consumable or not
 * (I) Tracks the replacement value of each item. Front-end displays total aggregate value on index, and sub-values on Warehouse and Box detail pages.
 * (I) Set keywords to make search results filter-able. Add as many keywords as applicable. Suggested keywords include "Category: <category>" for categories like "kitchen" "archery" "heraldic" etc; "Color: <color>" to classify items by their main color(s); "Material: <material>" to classify by material (glass, metal, plastic, etc)
-  * (N) Keywords show on item detail page
+  * (I) Keywords show on item detail page (implemented 9/20/2020)
   * (N) Keyword detail pages list all items
 * (I) Move items from one box to another by updating the current box's end date and creating a new items_in_boxes record for the new box, leaving the end date blank. Item's box history will be preserved. Front end shows only current location.
 * Reports: 
