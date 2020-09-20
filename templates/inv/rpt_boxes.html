@@ -3,29 +3,69 @@
 
 {% block content %}
 {% load static %}
-  <!-- Main jumbotron for a primary marketing message or call to action -->
-  <h1>Boxes</h1>
-  <p class="lead">A Box holds a collection of Items.</p>
-  <div class="row mb-3">
-    {% for b in boxes %}
-    <div class="col-md-4 themed-grid-col">
-    
-
-      <div class="card mb-4 border-dark">
-        <img class="card-img-top" src="{% static 'inv/img/'|add:b.box_img %}" alt="Box Designator">
-                  <div class="card-body">
-                     <h5 class="card-title">{{ b.box_name }}</h5>
-                     <p class="card-text">This box is part of the {{ b.warehouse }} warehouse. 
-                     There are {{ b.num_items }} items attached to this box.</p>
-                     <a href="{% url 'box' b.box_id %}" class="btn btn-dark btn-sm">View</a>
-                  </div>
-      </div>
-    </div>
-
-
-
+<div class="container">
+  <h1>Items Organized by Box</h1>
+  <p class="lead">Box links lead to a similar report for that
+    single box. Item links lead to each item's detail page.</p> 
+    <!-- set links to box anchors, but only if boxes count is > 1 -->
+    {% if boxes|length > 1 %}
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto px-2">
+        <li class="nav-item dropdown"><a class="nav-link navbar-brand dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Jump to:</a>
+   <div class="dropdown-menu" aria-labelledby="navbarDropdown"> 
+        {% for b in boxes %}
+        <a class="dropdown-item" href="#{{ b.box_id }}">{{ b.box_id }} | {{ b.box_name }}</a>
+        
         {% endfor %}
-  </div>
-
-  
+        </li>
+      </ul>
+      </div>
+    </nav>
+    {% endif %}
+  <!-- create the tables -->
+  {% for b in boxes %}
+  <a name="{{ b.box_id }}"/>
+    <table id="box-{{ b.box_id }}" class="table table-striped table-responsive">
+       <thead class="thead-dark">
+         <tr>
+           <th colspan="8">
+             <a href="{% url 'report_box' b.box_id %}">Box {{ b.box_id }} | {{ b.box_name }}</a>
+           </th>
+         </tr>
+         <tr>
+           <th scope="col">ID</th>
+           <th scope="col">Name</th>
+           <th scope="col">Description</th>
+           <th scope="col">Quantity</th>
+           <th scope="col">Value Each</th>
+           <th scope="col">Total Value</th>
+           <th scope="col">Is Consumable?</th>
+           <th scope="col">Percent Remaining</th>
+          </tr>
+       </thead>
+       <tbody>
+            {% for i in items %}
+              {% if b.box_id == i.boxid %}
+                <tr id="item-{{ i.item_id }}" scope="row"}>
+                  <td>{{ i.item_id }}</td>
+                  <td><a href="{% url 'item' i.item_id %}">{{ i.item_name }}</a></td>
+                  <td>{{ i.item_desc }}</td>
+                  <td>{{ i.item_qty }}</td>
+                  <td>&#36;{{ i.item_value|floatformat:2 }}</td>
+                  <td>&#36;{{ i.totval|floatformat:2 }}</td>
+                  <td>{{ i.item_consumable }}</td>
+                  <td>{{ i.item_remaining }}&#37;</td>
+                </tr> 
+              {% endif %}<!-- end of item filter -->
+            {% endfor %}<!-- end of item loop -->
+        </tbody>  
+      </table>
+    {% endfor %}<!-- end of box loop -->
+  <hr/>
+</div>
 {% endblock %}
