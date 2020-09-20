@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Warehouse, Boxes, Items, Staff, Items_in_boxes, Keywords, Keywords_in_items, Inventory
 from django.db.models import Count, Sum, Q, F, DecimalField, FloatField, IntegerField, ExpressionWrapper
+from django.db.models.functions import Lower
 from decimal import Decimal
 
 def index(request):
@@ -21,7 +22,8 @@ def reports(request):
     return HttpResponse("Hello, world. You're at the Reports Page.")
 
 def items(request):
-    items = Items.objects.all()
+    items = Items.objects.all().prefetch_related().annotate(box=F('itm_id__box_id__box_name')).annotate(wh=F('itm_id__box_id__warehouse__warehouse_name')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).annotate(sort_name=Lower('item_name')).order_by('sort_name')
+        
     return render(request, 'inv/items.html', {'items' : items})
 
 def item(request, itemid):
