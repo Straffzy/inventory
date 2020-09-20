@@ -1,0 +1,60 @@
+{% extends 'inv/base.html' %}
+
+
+{% block content %}
+{% load static %}
+<div class="container">
+  <h1>Items</h1>
+  <p class="lead">Item links lead to each item's detail page.</p> 
+    <!-- set links to box anchors, but only if boxes count is > 1 -->
+    
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <span class="navbar-brand mr-auto px-2 bg-primary">Sort</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto px-2">
+        <li class="nav-item"><a class="nav-link" href="{% url 'report_itms' %}1/">By Item Name
+          </a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'report_itms' %}2/">By Item ID
+          </a></li>
+      </div>
+    </nav>
+   
+  <!-- create the tables -->
+     <table id="items" class="table table-striped table-responsive">
+       <thead class="thead-dark">
+         <tr>
+           <th colspan="8">
+              Items</th>
+         </tr>
+         <tr>
+           <th scope="col">ID</th>
+           <th scope="col">Name</th>
+           <th scope="col">Description</th>
+           <th scope="col">Quantity</th>
+           <th scope="col">Value Each</th>
+           <th scope="col">Total Value</th>
+           <th scope="col">Is Consumable?</th>
+           <th scope="col">Percent Remaining</th>
+          </tr>
+       </thead>
+       <tbody>
+            {% for i in items %}
+                <tr id="item-{{ i.item_id }}" scope="row"}>
+                  <td>{{ i.item_id }}</td>
+                  <td><a href="{% url 'item' i.item_id %}">{{ i.item_name }}</a></td>
+                  <td>{{ i.item_desc }}</td>
+                  <td>{{ i.item_qty }}</td>
+                  <td>&#36;{{ i.item_value|floatformat:2 }}</td>
+                  <td>&#36;{{ i.totval|floatformat:2 }}</td>
+                  <td>{{ i.item_consumable }}</td>
+                  <td>{{ i.item_remaining }}&#37;</td>
+                </tr> 
+              {% endfor %}<!-- end of item loop -->
+        </tbody>  
+      </table>
+    </div>
+{% endblock %}
