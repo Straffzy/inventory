@@ -1,0 +1,81 @@
+{% extends 'inv/base.html' %}
+
+
+{% block content %}
+{% load static %}
+<div class="container">
+
+  <h1>Items Organized by Warehouse and Box</h1>
+    <p class="lead">Warehouse and box links lead to a similar report for that
+    single warehouse or box. Item links lead to each item's detail page.</p> 
+    <!-- set links to warehouse anchors, but only if wh count > 1 -->
+    {% if wh|length > 1 %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <span class="navbar-brand mr-auto px-2 bg-primary">Jump to: </span>
+      <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto px-2">
+        {% for w in wh %}
+        <li class="nav-item active">
+          <a class="nav-link" href="#{{ w.warehouse_id }}">{{ w.warehouse_name }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      </div>
+    </nav>
+    {% endif %}
+  <!-- create the tables -->
+  {% for w in wh %}
+<div class="container">
+  <a name="{{ w.warehouse_id }}"/>
+  <h2>
+    <a href="{% url 'report_wh' w.warehouse_id %}">{{ w.warehouse_name }}</a>
+  </h2>
+    {% for b in box %}
+      {% if w.warehouse_id == b.whid %}
+      
+        <table id="box-{{ b.box_id }}" class="table table-striped
+          table-responsive">
+          <thead class="thead-dark">
+            <tr>
+              <th colspan="8">
+                <a href="{% url 'report_box' b.box_id %}">Box {{ b.box_id }} | {{ b.box_name }}</a>
+              </th>
+            </tr>
+            <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Value Each</th>
+            <th scope="col">Total Value</th>
+            <th scope="col">Is Consumable?</th>
+            <th scope="col">Percent Remaining</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in items %}
+              {% if b.box_id == i.boxid %}
+                <tr id="item-{{ i.item_id }}" scope="row"}>
+                  <td>{{ i.item_id }}</td>
+                  <td><a href="{% url 'item' i.item_id %}">{{ i.item_name }}</a></td>
+                  <td>{{ i.item_desc }}</td>
+                  <td>{{ i.item_qty }}</td>
+                  <td>&#36;{{ i.item_value|floatformat:2 }}</td>
+                  <td>&#36;{{ i.totval|floatformat:2 }}</td>
+                  <td>{{ i.item_consumable }}</td>
+                  <td>{{ i.item_remaining }}&#37;</td>
+                </tr> 
+              {% endif %}<!-- end of item filter -->
+            {% endfor %}<!-- end of item loop -->
+        </table>
+    {% endif %}<!-- end of box filter -->
+    {% endfor %}<!-- end of box loop -->
+    <hr/>
+</div>
+  {% endfor %}<!-- end of wh loop --> 
+</div>
+{% endblock %}
