@@ -1,0 +1,57 @@
+{% extends 'inv/base.html' %}
+
+
+{% block content %}
+{% load static %} 
+
+  <h1>Items</h1>
+  <p class="lead">There are {{ items|length }} items in this collection.</p>
+  <div class="row mb-3">
+    {% for i in items %}
+       <div class="col-md-4 themed-grid-col">
+        <div class="card mb-4 border-dark">
+          {% if i.item_img|length > 0 %}
+            <img class="card-img-top" 
+               src="{% static 'inv/img/'|add:i.item_img %}" alt="Photo of Item">
+            {% else %}<p>A photo of this item does not exist.</p>
+            {% endif %}
+            <h5 class="card-title">{{ i.item_name }}</h5>
+            <p class="card-text">
+            Description: {{ i.item_desc }}<br/>
+            Location: 
+            <ul>
+              <li>Warehouse: {{ i.wh }}</li>
+              <li>Box: {{ i.box }}</li>
+            </ul>
+            Quantity: {{ i.item_qty }} <br/>
+            Value (each): {{ i.item_val|floatformat:2 }} <br/>
+            {% if i.qty > 1 %}
+              Value (total): {{ i.totval|floatformat:2 }} <br/>
+            {% endif %}
+            {% if i.consumable == True %}
+              Consumable: Yes<br/>
+              Percent Remaining: {{ i.item_remaining }}&#37;<br/>
+            {% else %}
+              Consumable: No<br/>
+            {% endif %}
+            {% if i.kw_itm %}
+            Keywords:
+            
+            <ul>
+              {% for k in i.kw_itm.all %}
+                <li> 
+                {{ k.keyword_id }}
+                </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            <a href="{% url 'item' i.item_id %}" class="btn btn-dark
+                   btn-sm">View</a>
+            </p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  
+{% endblock %}

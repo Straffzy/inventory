@@ -16,5 +16,10 @@ urlpatterns = [
         path('inventories/', views.inventory, name='inventories'),
         path('inventories/<int:invid>/', views.inventory, name='inventory'),
         path('keywords/', views.keywords, name='keywords'),
-        path('downloads/', views.downloads, name='downloads'),
+        path('reports/item/<int:item_sort>', views.report_itm, name='report_itm'),        
+        path('reports/item/', views.report_itm, name='report_itms'),
+        path('reports/box/<int:box>', views.report_box, name='report_box'),
+        path('reports/box/', views.report_box, name='report_boxes'),
+        path('reports/wh/<int:whid>', views.report_wh, name='report_wh'),
+        path('reports/wh/', views.report_wh, name='report_whs'),
         ]

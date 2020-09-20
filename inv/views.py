@@ -19,11 +19,39 @@ def search(request):
     return HttpResponse("Hello, world. You're at the Search Page.")
 
 def reports(request):
-    return HttpResponse("Hello, world. You're at the Reports Page.")
+    return render(request, inv/reports.html)
+
+def report_itm(request, item_sort=None):
+    # item_sort 1 is alpha by item_name
+    if item_sort == 1:
+        items = Items.objects.all().prefetch_related().annotate(box=F('itm_id__box_id__box_name')).annotate(wh=F('itm_id__box_id__warehouse__warehouse_name')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).annotate(sort_name=Lower('item_name')).order_by('sort_name')
+    # item_sort 2 is by item_id
+    elif item_sort == 2:
+         items = Items.objects.all().prefetch_related().annotate(box=F('itm_id__box_id__box_name')).annotate(wh=F('itm_id__box_id__warehouse__warehouse_name')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).order_by('item_id')
+    else:   
+         items = Items.objects.all().prefetch_related().annotate(box=F('itm_id__box_id__box_name')).annotate(wh=F('itm_id__box_id__warehouse__warehouse_nam    e')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField()))
+    return render(request, inv/rpt_items.html, {'items' : items})
+    
+def report_box(request, box=None):
+    if box:
+        boxes = Boxes.objects.filter(box_id=box)
+    else: 
+        boxes = Boxes.objects.all()
+    items = Items.objects.all().prefetch_related().annotate(boxid=F('itm_id__box_id')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).annotate(sort_name=Lower('item_name')).order_by('sort_name')
+    return render(request, inv/rpt_boxes.html, {'items' : items, 'boxes' : boxes})
+
+def report_wh(request, whid=None):
+    # warehouse report for a single warehouse
+    if whid:
+        wh = Warehouse.objects.filter(warehouse_id=whid)
+    else: wh = Warehouse.objects.all()
+    box = Boxes.objects.all().prefetch_related().annotate(whid=F('warehouse__warehouse_id'))
+    items =  items = Items.objects.all().prefetch_related().annotate(boxid=F('itm_id__box_id')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).annotate(sort_name=Lower('item_name')).order_by('sort_name')
+    
+    return render(request, 'inv/rpt_wh.html', {'items' : items, 'wh' : wh, 'box' : box})
 
 def items(request):
     items = Items.objects.all().prefetch_related().annotate(box=F('itm_id__box_id__box_name')).annotate(wh=F('itm_id__box_id__warehouse__warehouse_name')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).annotate(sort_name=Lower('item_name')).order_by('sort_name')
-        
     return render(request, 'inv/items.html', {'items' : items})
 
 def item(request, itemid):
@@ -66,5 +94,3 @@ def inventory(request, invid):
 def keywords(request):
     return HttpResponse("Hello, world. You're looking at a list of keywords.")
 
-def downloads(request):
-    return HttpResponse("Hello, world. You're looking at the Downloads Page.")

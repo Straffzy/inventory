@@ -1,0 +1,31 @@
+{% extends 'inv/base.html' %}
+
+
+{% block content %}
+{% load static %}
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <h1>Boxes</h1>
+  <p class="lead">A Box holds a collection of Items.</p>
+  <div class="row mb-3">
+    {% for b in boxes %}
+    <div class="col-md-4 themed-grid-col">
+    
+
+      <div class="card mb-4 border-dark">
+        <img class="card-img-top" src="{% static 'inv/img/'|add:b.box_img %}" alt="Box Designator">
+                  <div class="card-body">
+                     <h5 class="card-title">{{ b.box_name }}</h5>
+                     <p class="card-text">This box is part of the {{ b.warehouse }} warehouse. 
+                     There are {{ b.num_items }} items attached to this box.</p>
+                     <a href="{% url 'box' b.box_id %}" class="btn btn-dark btn-sm">View</a>
+                  </div>
+      </div>
+    </div>
+
+
+
+        {% endfor %}
+  </div>
+
+  
+{% endblock %}
