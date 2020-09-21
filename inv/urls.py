@@ -22,4 +22,5 @@ urlpatterns = [
         path('reports/box/', views.report_box, name='report_boxes'),
         path('reports/wh/<int:whid>/', views.report_wh, name='report_wh'),
         path('reports/wh/', views.report_wh, name='report_whs'),
+        path('reports/fullpdf/', views.fullpdf, name='fullpdf'),
         ]

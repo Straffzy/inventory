@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from .models import Warehouse, Boxes, Items, Staff, Items_in_boxes, Keywords, Keywords_in_items, Inventory
 from django.db.models import Count, Sum, Q, F, DecimalField, FloatField, IntegerField, ExpressionWrapper
-from django.db.models.functions import Lower
 from decimal import Decimal
+from django.db.models.functions import Lower
 
 def index(request):
     item_count = Items.objects.all().annotate(Count("item_id"))
@@ -94,3 +94,109 @@ def inventory(request, invid):
 def keywords(request):
     return HttpResponse("Hello, world. You're looking at a list of keywords.")
 
+########## PDF Generation Classes ##############
+
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.rl_config import defaultPageSize
+from reportlab.lib.units import inch
+PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]
+styles = getSampleStyleSheet()
+
+def titlePage(canvas, doc):
+    canvas.saveState()
+    canvas.setFont('Times-Roman', 9)
+    canvas.drawString(inch, 0.75*inch, "First Page")
+    canvas.restoreState()
+
+def regPage(canvas, doc):
+    canvas.saveState()
+    canvas.setFont('Times-Roman', 9)
+    canvas.drawString(inch, 0.75*inch, "Page %d " % doc.page)
+    canvas.restoreState()
+
+def fullpdf(request):
+    import io 
+    from datetime import date
+    from reportlab.pdfgen import canvas
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, PageBreak
+    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.rl_config import defaultPageSize
+    from reportlab.lib.units import inch
+
+    # set up the document
+    response = HttpResponse(content_type='application/pdf')
+    
+    response['Content-Disposition'] = 'attachment; filename=file.pdf'
+
+    buff = io.BytesIO()
+
+
+    PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]
+    styles = getSampleStyleSheet()
+    filename = ("full_inventory.%s.pdf" % date.today())
+    doc = SimpleDocTemplate(filename)
+    story = [Spacer(1,2*inch)]
+    style = styles['Normal']
+    tstyle = styles['Title']
+    Title = Paragraph("Inventory Report", tstyle)
+    Subtitle = Paragraph("Table of contents <br/> <ol><li>Box List by ID</li><li>Box List by Name</li><li>Items by Box, ordered by Warehouse</li></ul>", style)
+    story.append(Title)
+    story.append(Subtitle)
+    # generate the boxes by ID table
+    boxes_bxid = Boxes.objects.all().order_by('box_id')
+    desc = ("Boxes ordered by Box ID")
+    p = Paragraph(desc, style)
+    story.append(p)
+    for b in boxes_bxid:
+        boxid = "ID"
+        name = "Name"
+        data = [boxid, name]
+        row = [b.box_id, b.box_name]
+        data.append(row)
+    t = Table(data, splitByRow=1, repeatRows=0)
+    story.append(t)
+    story.append(PageBreak())
+
+    # generate the boxes by name table
+    boxes_bxnm = Boxes.objects.all().annotate(iname=Lower('box_name')).order_by('iname') 
+    desc = ("Boxes ordered by Box Name")
+    p = Paragraph(desc, style)
+    story.append(p)
+    for b in boxes_bxnm:
+        boxid = "ID"
+        name = "Name"
+        data = [boxid, name]
+        row = [b.box_id, b.box_name]
+        data.append(row)
+    t = Table(data, splitByRow=1, repeatRows=0)
+    story.append(t)
+    story.append(PageBreak())
+
+    # generate the items by box tables, sorted by warehouse
+    boxes_whid = Boxes.objects.all().prefetch_related().annotate(wh=F('warehouse__warehouse_name')).order_by('warehouse')
+    items = Items.objects.all().prefetch_related().annotate(boxid=F('itm_id__box_id')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).annotate(sort_name=Lower('item_name')).order_by('sort_name')
+    for b in boxes_whid:
+        desc = ("%s: %s in %s" % (b.box_id, b.box_name, b.wh))
+        p = Paragraph(desc, style)
+        story.append(p)
+        boxid = "ID"
+        name = "Name"
+        desc = "Description"
+        qty = "Quantity"
+        val = "Value (ea)"
+        totval = "Value (tot)"
+        percent = "Percent Rem."
+        data = [boxid, name, desc, qty, val, totval, percent]
+        for i in items:
+            if i.boxid == b.box_id:
+                row = [i.item_id, i.item_name, i.item_desc, i.item_qty, round(i.item_value, 2), round(i.totval, 2), i.item_remaining]
+                data.append(row)
+        t = Table(data, splitByRow=1, repeatRows=0)
+        story.append(t)
+        story.append(PageBreak())
+    doc.build(story, onFirstPage=titlePage, onLaterPages=regPage)
+    response.write(buff.getvalue())
+    buff.close()
+    return response
+                
