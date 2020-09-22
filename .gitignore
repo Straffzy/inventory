@@ -10,3 +10,4 @@ db.json
 /zip
 .wakatime
 credentials.py
+node_modules/*

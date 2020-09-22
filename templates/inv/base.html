@@ -9,31 +9,69 @@
     <meta name="generator" content="Jekyll v4.1.1">
     <title>Inventory Manager</title>
 
-  <!-- Bootstrap core CSS -->
+<!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="{% static 'inv/css/bootstrap.min.css' %}">
-
 <!-- Jumbotron CSS -->
 <link rel="stylesheet" href="{% static 'inv/css/jumbotron.css' %}">
-
 <!-- Grid CSS -->
 <link rel="stylesheet" href="{% static 'inv/css/grid.css' %}">
-
 <!-- dashboard CSS -->
 <link rel="stylesheet" href="{% static 'inv/css/dashboard.css' %}">
-
 <!-- navbar CSS -->
 <link rel="stylesheet" href="{% static 'inv/css/navbar.css' %}">
-
 <!-- card CSS -->
 <link rel="stylesheet" href="{% static 'inv/css/card.css' %}">
-
 <!-- Datatables CSS -->
 <link rel="stylesheet" type="text/css" href="{% static 'inv/css/jquery.dataTables.css' %}">
+<!-- bootstrap-grid CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/bootstrap-grid.css' %}">
+<!-- bootstrap-reboot CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/bootstrap-reboot.css' %}">
+<!-- buttons.bootstrap CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/buttons.bootstrap.css' %}">
+<!-- buttons.bootstrap4 CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/buttons.bootstrap4.css' %}">
+<!-- buttons.dataTables CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/buttons.dataTables.css' %}">
+<!-- buttons.foundation CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/buttons.foundation.css' %}">
 
-
-
-
-
+<!-- dataTables.bootstrap CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/dataTables.bootstrap.css' %}">
+<!-- dataTables.bootstrap4 CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/dataTables.bootstrap4.css' %}">
+<!-- dataTables.foundation CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/dataTables.foundation.css' %}">
+<!-- dataTables.SemanticUI CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/dataTables.semanticui.css' %}">
+<!-- jquery.dataTables CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/jquery.dataTables.css' %}">
+<!-- navbar CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/navbar.css' %}">
+<!-- searchBuilder.bootstrap CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchBuilder.bootstrap.css' %}">
+<!-- searchBuilder.bootstrap4 CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchBuilder.bootstrap4.css' %}">
+<!-- searchBuilder.dataTables CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchBuilder.dataTables.css' %}">
+<!-- searchBuilder.foundation CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchBuilder.foundation.css' %}">
+<!-- searchBuilder.jqueryui CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchBuilder.jqueryui.css' %}">
+<!-- searchBuilder.semanticui CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchBuilder.semanticui.css' %}">
+<!-- searchPanes.bootstrap CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchPanes.bootstrap.css' %}">
+<!-- searchPanes.bootstrap4 CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchPanes.bootstrap4.css' %}">
+<!-- searchPanes.dataTables CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchPanes.dataTables.css' %}">
+<!-- searchPanes.foundation CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchPanes.foundation.css' %}">
+<!-- searchPanes.jQueryUI CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchPanes.jqueryui.css' %}">
+<!-- searchPanes.semanticui CSS -->
+<link rel="stylesheet" href="{% static 'inv/css/searchPanes.semanticui.css' %}">
 
     <style>
       .bd-placeholder-img {
@@ -103,26 +141,133 @@
 </footer>
 <!-- load jQuery -->
 <script type="text/javascript" charset="utf8" src="{% static 'inv/js/jquery.min.js' %}"></script>
+<!-- load jQuery-slim -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/jquery.slim.js' %}"></script>
 <!-- load Bootstrap -->
 <script type="text/javascript" charset="utf8" src="{% static 'inv/js/bootstrap.bundle.min.js' %}" ></script>
+<!-- load Feather -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/feather.js' %}"></script>
+<!-- Load Popper -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/popper.js' %}"></script>
+<!-- Load Popper-utils -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/popper-utils.js' %}"></script>
+<!-- Load Chart -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/Chart.js' %}"></script>
+<!-- Load Chart.bundle -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/Chart.bundle.js' %}"></script>
+<!-- load Bootstrap Dashboard -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/dashboard.js' %}"></script>
+
 <!-- load DataTables -->
 <script type="text/javascript" charset="utf8" src="{% static 'inv/js/jquery.dataTables.js' %}"></script>
+<!-- load dtDataTables -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/dataTables.dataTables.js' %}"></script>
+<!-- load dtBootstrap -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/dataTables.bootstrap.js' %}"></script>
+<!-- load dtBootstrap4 -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/dataTables.bootstrap4.js' %}"></script>
+<!-- load dtFoundation -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/dataTables.foundation.js' %}"></script>
+<!-- load dtSemanticUI -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/dataTables.semanticui.js' %}"></script>
+<!-- load dt-jQueryUI -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/dataTables.jqueryui.js' %}"></script>
+<!-- load jszip -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/jszip.js' %}"></script>
+<!-- load pdfmake -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/pdfmake.js' %}"></script>
+<!-- load vfsFonts -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/vfs_fonts.js' %}"></script>
+<!-- load dtButtons -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/dataTables.buttons.js' %}"></script>
+<!-- load dtSearchBuilder -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/dataTables.searchBuilder.js' %}"></script>
+<!-- load dtSearchPanes -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/dataTables.searchPanes.js' %}"></script>
+
+<!-- load dtButtons Bootstrap  -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/buttons.bootstrap.js' %}"></script>
+<!-- load dtButtons Bootstrap4  -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/buttons.bootstrap4.js' %}"></script>
+<!-- load dtButtons-ColVis -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/buttons.colVis.js' %}"></script>
+<!-- load dtButtons-Flash -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/buttons.flash.js' %}"></script>
+<!-- load dtButtons-Foundation -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/buttons.foundation.js' %}"></script>
+<!-- load dtButtons-html5 -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/buttons.html5.js' %}"></script>
+<!-- load dtButtons-jqueryUI -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/buttons.jqueryui.js' %}"></script>
+<!-- load dtButtons-Print -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/buttons.print.js' %}"></script>
+<!-- load dtButtons-SemanticUI -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/buttons.semanticui.js' %}"></script>
+<!-- load searchBuilder-Bootstrap -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchBuilder.bootstrap.js' %}"></script>
+<!-- load searchBuilder-Bootstrap4 -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchBuilder.bootstrap4.js' %}"></script>
+<!-- load searchbuilder-DataTables -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchBuilder.dataTables.js' %}"></script>
+<!-- load searchBuilder-Foundation -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchBuilder.foundation.js' %}"></script>
+<!-- load searchBuilder-jQueryUI -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchBuilder.jqueryui.js' %}"></script>
+<!-- load searchBuilder-semanticUI -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchBuilder.semanticui.js' %}"></script>
+<!-- load searchPanes-Bootstrap -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchPanes.bootstrap.js' %}"></script>
+<!-- load searchPanes-Bootstrap4 -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchPanes.bootstrap4.js' %}"></script>
+<!-- load searchPanes-dataTables -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchPanes.dataTables.js' %}"></script>
+<!-- load searchPanes-foundation -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchPanes.foundation.js' %}"></script>
+<!-- load searchPanes-jQueryUI -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchPanes.jqueryui.js' %}"></script>
+<!-- load searchPanes-SemanticUI -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/searchPanes.semanticui.js' %}"></script>
+
+
 
 <!-- DataTables Scripts -->
 <script>
 $(document).ready( function () {
-    $('table.display').DataTable(
-      {buttons: [
-        'copy', 'csv', 'excel', 'pdf']
-  
+<!-- //warehouses/boxes/items report
+  var whtable = $('table.wh-box').DataTable();
+
+  new $.fn.dataTable.Buttons( whtable, {
+      dom: '<f>r<t>ipB',
+      buttons: [
+          'copy', 'csv', 'excel', 'pdf'
+      ]
+  }
+);
+whtable.buttons().container().appendTo( '.buttons' );
+
+<!--//boxes/items report
+    var boxtable = $('table.box').DataTable();
+
+    new $.fn.dataTable.Buttons( boxtable, {
+        dom: 'frBtip',
+        buttons: [
+            'csv', 'copy', 'excel', 'pdf'
+        ]
       }
-
     );
+    boxtable.buttons().container().appendTo( '.box', );
+<!--//items report
+  var itemtable = $('table.items').DataTable();
 
-    $('table.items').DataTable(
-      {buttons: [
-        'copy', 'csv ', 'excel', 'pdf']}
-    );
+  new $.fn.dataTable.Buttons( itemtable, {
+      dom: '<b>fr<t>ip',
+      buttons: [
+          'copy', 'excel', 'pdf'
+      ]
+  } );
+
+  itemtable.buttons().container().appendTo( '.items', );
+
 } );
 
 

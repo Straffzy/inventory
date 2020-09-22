@@ -7,7 +7,7 @@
 
   <h1>Items Organized by Warehouse and Box</h1>
     <p class="lead">Warehouse and box links lead to a similar report for that
-    single warehouse or box. Item links lead to each item's detail page.</p> 
+    single warehouse or box. Item links lead to each item's detail page.</p>
     <!-- set links to warehouse anchors, but only if wh count > 1 -->
     {% if wh|length > 1 %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -36,13 +36,13 @@
   </h2>
     {% for b in box %}
       {% if w.warehouse_id == b.whid %}
-      
-        <table id="box-{{ b.box_id }}" class="table table-striped
+
+        <table id="box-{{ b.box_id }}" class="wh-box table table-striped
           table-responsive">
           <thead class="thead-dark">
             <tr>
-              <th colspan="8">
-                <a href="{% url 'report_box' b.box_id %}">Box {{ b.box_id }} | {{ b.box_name }}</a>
+              <th colspan="8" class="buttons">
+                <a href="{% url 'report_box' b.box_id %}">Box {{ b.box_id }} | {{ b.box_name }}</a><span class="buttons pull-right"></span>
               </th>
             </tr>
             <tr>
@@ -68,7 +68,7 @@
                   <td>&#36;{{ i.totval|floatformat:2 }}</td>
                   <td>{{ i.item_consumable }}</td>
                   <td>{{ i.item_remaining }}&#37;</td>
-                </tr> 
+                </tr>
               {% endif %}<!-- end of item filter -->
             {% endfor %}<!-- end of item loop -->
         </table>
@@ -76,6 +76,6 @@
     {% endfor %}<!-- end of box loop -->
     <hr/>
 </div>
-  {% endfor %}<!-- end of wh loop --> 
+  {% endfor %}<!-- end of wh loop -->
 </div>
 {% endblock %}

@@ -30,8 +30,8 @@
   <!-- create the tables -->
   {% for b in boxes %}
   <a name="{{ b.box_id }}"></a>
-    <table id="box-{{ b.box_id }}" class="display table table-striped table-responsive">
-       <thead class="thead-dark">
+    <table id="box-{{ b.box_id }}" class="box table table-striped table-responsive">
+       <thead class="thead-dark buttons">
          <tr>
            <th colspan="8">
              <a href="{% url 'report_box' b.box_id %}">Box {{ b.box_id }} | {{ b.box_name }}</a>
