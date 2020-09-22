@@ -28,14 +28,14 @@ def report_itm(request, item_sort=None):
     # item_sort 2 is by item_id
     elif item_sort == 2:
          items = Items.objects.all().prefetch_related().annotate(box=F('itm_id__box_id__box_name')).annotate(wh=F('itm_id__box_id__warehouse__warehouse_name')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).order_by('item_id')
-    else:   
+    else:
          items = Items.objects.all().prefetch_related().annotate(box=F('itm_id__box_id__box_name')).annotate(wh=F('itm_id__box_id__warehouse__warehouse_name')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField()))
     return render(request, 'inv/rpt_items.html', {'items' : items})
-    
+
 def report_box(request, box=None):
     if box:
         boxes = Boxes.objects.filter(box_id=box)
-    else: 
+    else:
         boxes = Boxes.objects.all()
     items = Items.objects.all().prefetch_related().annotate(boxid=F('itm_id__box_id')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).annotate(sort_name=Lower('item_name')).order_by('sort_name')
     return render(request, 'inv/rpt_boxes.html', {'items' : items, 'boxes' : boxes})
@@ -47,7 +47,7 @@ def report_wh(request, whid=None):
     else: wh = Warehouse.objects.all()
     box = Boxes.objects.all().prefetch_related().annotate(whid=F('warehouse__warehouse_id'))
     items =  items = Items.objects.all().prefetch_related().annotate(boxid=F('itm_id__box_id')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).annotate(sort_name=Lower('item_name')).order_by('sort_name')
-    
+
     return render(request, 'inv/rpt_wh.html', {'items' : items, 'wh' : wh, 'box' : box})
 
 def items(request):
@@ -56,9 +56,9 @@ def items(request):
 
 def item(request, itemid):
     item = Items.objects.filter(item_id=itemid).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).get(item_id=itemid)
-    box = Items_in_boxes.objects.filter(item_id=itemid).filter(date_to__isnull=True).annotate(name=F('box_id__box_name')).annotate(bx_id=F('box_id')).get(item_id=itemid) 
+    box = Items_in_boxes.objects.filter(item_id=itemid).filter(date_to__isnull=True).annotate(name=F('box_id__box_name')).annotate(bx_id=F('box_id')).get(item_id=itemid)
     wh = Boxes.objects.filter(box_id=box.bx_id).annotate(name=F('warehouse__warehouse_name')).get(box_id=box.bx_id)
-    return render(request, 'inv/item.html', {'item' : item , 'box' : box, 'wh' : wh }) 
+    return render(request, 'inv/item.html', {'item' : item , 'box' : box, 'wh' : wh })
 
 def boxes(request):
     boxes = Boxes.objects.all().annotate(num_items=Count('bx_id__item_id', filter=Q(bx_id__date_to__isnull=True)))
@@ -96,27 +96,32 @@ def keywords(request):
 
 ########## PDF Generation Classes ##############
 
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.rl_config import defaultPageSize
-from reportlab.lib.units import inch
-PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]
-styles = getSampleStyleSheet()
-
 def titlePage(canvas, doc):
+    from reportlab.pdfgen import canvas
+    from reportlab.rl_config import defaultPageSize
+    from reportlab.lib.units import inch
+    from reportlab.lib.styles import getSampleStyleSheet
+    PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]
+    styles = getSampleStyleSheet()
     canvas.saveState()
     canvas.setFont('Times-Roman', 9)
     canvas.drawString(inch, 0.75*inch, "First Page")
     canvas.restoreState()
 
 def regPage(canvas, doc):
+    from reportlab.pdfgen import canvas
+    from reportlab.rl_config import defaultPageSize
+    from reportlab.lib.units import inch
+    from reportlab.lib.styles import getSampleStyleSheet
+    PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]
+    styles = getSampleStyleSheet()
     canvas.saveState()
     canvas.setFont('Times-Roman', 9)
     canvas.drawString(inch, 0.75*inch, "Page %d " % doc.page)
     canvas.restoreState()
 
 def fullpdf(request):
-    import io 
+    import io
     from datetime import date
     from reportlab.pdfgen import canvas
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, PageBreak
@@ -125,12 +130,15 @@ def fullpdf(request):
     from reportlab.lib.units import inch
 
     # set up the document
+    PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]
+    styles = getSampleStyleSheet()
     response = HttpResponse(content_type='application/pdf')
-    
+
     response['Content-Disposition'] = 'attachment; filename=file.pdf'
 
     buff = io.BytesIO()
 
+    canvas = canvas.Canvas(buff)
 
     PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]
     styles = getSampleStyleSheet()
@@ -143,60 +151,69 @@ def fullpdf(request):
     Subtitle = Paragraph("Table of contents <br/> <ol><li>Box List by ID</li><li>Box List by Name</li><li>Items by Box, ordered by Warehouse</li></ul>", style)
     story.append(Title)
     story.append(Subtitle)
+
     # generate the boxes by ID table
     boxes_bxid = Boxes.objects.all().order_by('box_id')
     desc = ("Boxes ordered by Box ID")
     p = Paragraph(desc, style)
     story.append(p)
+    data = list([])
+    row = (["Box ID", "Box Name"])
+    data.append(row)
     for b in boxes_bxid:
-        boxid = "ID"
-        name = "Name"
-        data = [boxid, name]
-        row = [b.box_id, b.box_name]
+        row = ([b.box_id, b.box_name])
         data.append(row)
-    t = Table(data, splitByRow=1, repeatRows=0)
+    rowcount = (len(boxes_bxid) + 1)
+    rowheights = (rowcount*[0.4*inch])
+    colwidths = (0.5*inch, 2*inch)
+    t = Table(data, colwidths, rowheights, splitByRow=1, repeatRows=1)
     story.append(t)
     story.append(PageBreak())
 
     # generate the boxes by name table
-    boxes_bxnm = Boxes.objects.all().annotate(iname=Lower('box_name')).order_by('iname') 
+    boxes_bxnm = Boxes.objects.all().annotate(iname=Lower('box_name')).order_by('iname')
     desc = ("Boxes ordered by Box Name")
     p = Paragraph(desc, style)
     story.append(p)
+    data = list([])
+    row = (["Box ID", "Box Name"])
+    data.append(row)
     for b in boxes_bxnm:
-        boxid = "ID"
-        name = "Name"
-        data = [boxid, name]
-        row = [b.box_id, b.box_name]
+        row = ([b.box_id, b.box_name])
         data.append(row)
-    t = Table(data, splitByRow=1, repeatRows=0)
+    rowcount = (len(boxes_bxnm) + 1)
+    rowheights = (rowcount*[0.4*inch])
+    colwidths = (0.5*inch, 2*inch)
+    t = Table(data, colwidths, rowheights, splitByRow=1, repeatRows=1)
     story.append(t)
-    story.append(PageBreak())
 
     # generate the items by box tables, sorted by warehouse
+    boxitems = Items_in_boxes.objects.filter(date_to__isnull=True)
     boxes_whid = Boxes.objects.all().prefetch_related().annotate(wh=F('warehouse__warehouse_name')).order_by('warehouse')
     items = Items.objects.all().prefetch_related().annotate(boxid=F('itm_id__box_id')).annotate(totval=Sum(F('item_value')*F('item_qty'), output_field=FloatField())).annotate(sort_name=Lower('item_name')).order_by('sort_name')
     for b in boxes_whid:
+        story.append(PageBreak())
         desc = ("%s: %s in %s" % (b.box_id, b.box_name, b.wh))
         p = Paragraph(desc, style)
         story.append(p)
-        boxid = "ID"
-        name = "Name"
-        desc = "Description"
-        qty = "Quantity"
-        val = "Value (ea)"
-        totval = "Value (tot)"
-        percent = "Percent Rem."
-        data = [boxid, name, desc, qty, val, totval, percent]
+        data = list([])
+        row = ("ID", "Name", "Description", "Qty", "Value (ea)", "Value (tot)", "Percent Rem.")
+        data.append(row)
+        rows = boxitems.filter(box_id=b.box_id)
         for i in items:
             if i.boxid == b.box_id:
-                row = [i.item_id, i.item_name, i.item_desc, i.item_qty, round(i.item_value, 2), round(i.totval, 2), i.item_remaining]
+                row = (i.item_id, i.item_name, i.item_desc, i.item_qty, round(i.item_value, 2), round(i.totval, 2), i.item_remaining)
                 data.append(row)
-        t = Table(data, splitByRow=1, repeatRows=0)
+        rowcount = (len(rows) + 1)
+        rowheights = (rowcount*[0.4*inch])
+        colwidths = (0.5*inch, inch, 1.5*inch, 0.4*inch, 0.4*inch, 0.4*inch, 0.4*inch)
+        t = Table(data, colwidths, rowheights, splitByRow=1, repeatRows=1)
         story.append(t)
-        story.append(PageBreak())
+
+    endnote = ("This document was automatically generated by the Chamberlain's Assistant inventory application on %s" % date.today())
+    p = Paragraph(endnote, style)
+    story.append(p)
     doc.build(story, onFirstPage=titlePage, onLaterPages=regPage)
     response.write(buff.getvalue())
     buff.close()
     return response
-                

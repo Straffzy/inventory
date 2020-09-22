@@ -24,7 +24,16 @@
 <!-- navbar CSS -->
 <link rel="stylesheet" href="{% static 'inv/css/navbar.css' %}">
 
+<!-- card CSS -->
 <link rel="stylesheet" href="{% static 'inv/css/card.css' %}">
+
+<!-- Datatables CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'inv/css/jquery.dataTables.css' %}">
+
+
+
+
+
 
     <style>
       .bd-placeholder-img {
@@ -92,20 +101,30 @@
 <footer class="container">
   <p>&copy; Shire of ________ 2020</p>
 </footer>
+<!-- load jQuery -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/jquery.min.js' %}"></script>
+<!-- load Bootstrap -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/bootstrap.bundle.min.js' %}" ></script>
+<!-- load DataTables -->
+<script type="text/javascript" charset="utf8" src="{% static 'inv/js/jquery.dataTables.js' %}"></script>
+
+<!-- DataTables Scripts -->
 <script>
-  function hiderows() {
-    var panels = document.getElementsByClassName("full");
-    for(var i = 0; i < panels.length; i++) {
-      var panel = panels[i];
-      if( panel.style.display == 'none') {
-        panel.style.display = ''; } 
-      else { panel.style.display = 'none';}
-    }
-  }
+$(document).ready( function () {
+    $('table.display').DataTable(
+      {buttons: [
+        'copy', 'csv', 'excel', 'pdf']
+  
+      }
+
+    );
+
+    $('table.items').DataTable(
+      {buttons: [
+        'copy', 'csv ', 'excel', 'pdf']}
+    );
+} );
+
 
 </script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-      <script>window.jQuery || document.write('<script
-        src="https://code.jquery.com/jquery.slim.min.js"><\/script>')</script>
-      <script src="{% static 'inv/js/bootstrap.bundle.min.js' %}" ></script>
 </html>

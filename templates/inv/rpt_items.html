@@ -5,9 +5,9 @@
 {% load static %}
 <div class="container">
   <h1>Items</h1>
-  <p class="lead">Item links lead to each item's detail page.</p> 
+  <p class="lead">Item links lead to each item's detail page.</p>
     <!-- set links to box anchors, but only if boxes count is > 1 -->
-    
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <span class="navbar-brand mr-auto px-2 bg-primary">Sort</span>
     <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -20,11 +20,15 @@
           </a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'report_itms' %}2/">By Item ID
           </a></li>
+        </ul>
+        <ul class="navbar-nav ml-auto px-2">
+          <li class="nav-item B"></li>
+        </ul>
       </div>
     </nav>
-   
+
   <!-- create the tables -->
-     <table id="items" class="table table-striped table-responsive">
+     <table id="items" class="display table table-striped table-responsive">
        <thead class="thead-dark">
          <tr>
            <th colspan="8">
@@ -52,9 +56,10 @@
                   <td>&#36;{{ i.totval|floatformat:2 }}</td>
                   <td>{{ i.item_consumable }}</td>
                   <td>{{ i.item_remaining }}&#37;</td>
-                </tr> 
+                </tr>
               {% endfor %}<!-- end of item loop -->
-        </tbody>  
+        </tbody>
       </table>
     </div>
+
 {% endblock %}

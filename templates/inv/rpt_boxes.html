@@ -6,7 +6,7 @@
 <div class="container">
   <h1>Items Organized by Box</h1>
   <p class="lead">Box links lead to a similar report for that
-    single box. Item links lead to each item's detail page.</p> 
+    single box. Item links lead to each item's detail page.</p>
     <!-- set links to box anchors, but only if boxes count is > 1 -->
     {% if boxes|length > 1 %}
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -17,10 +17,10 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mr-auto px-2">
         <li class="nav-item dropdown"><a class="nav-link navbar-brand dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Jump to:</a>
-   <div class="dropdown-menu" aria-labelledby="navbarDropdown"> 
+   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         {% for b in boxes %}
         <a class="dropdown-item" href="#{{ b.box_id }}">{{ b.box_id }} | {{ b.box_name }}</a>
-        
+
         {% endfor %}
         </li>
       </ul>
@@ -29,8 +29,8 @@
     {% endif %}
   <!-- create the tables -->
   {% for b in boxes %}
-  <a name="{{ b.box_id }}"/>
-    <table id="box-{{ b.box_id }}" class="table table-striped table-responsive">
+  <a name="{{ b.box_id }}"></a>
+    <table id="box-{{ b.box_id }}" class="display table table-striped table-responsive">
        <thead class="thead-dark">
          <tr>
            <th colspan="8">
@@ -60,12 +60,14 @@
                   <td>&#36;{{ i.totval|floatformat:2 }}</td>
                   <td>{{ i.item_consumable }}</td>
                   <td>{{ i.item_remaining }}&#37;</td>
-                </tr> 
+                </tr>
               {% endif %}<!-- end of item filter -->
             {% endfor %}<!-- end of item loop -->
-        </tbody>  
+        </tbody>
       </table>
     {% endfor %}<!-- end of box loop -->
   <hr/>
 </div>
+
+
 {% endblock %}
